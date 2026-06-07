@@ -6,7 +6,7 @@ reg  a;
 reg  b;
 reg  carry_in;
 wire result;
-wire carry;
+wire carry_out;
 
 full_adder test(
     .a(a),
