@@ -2,12 +2,13 @@
 
 module alu_test;
 
-reg [7:0] a, b;
-reg op;
+reg  [7:0] a;
+reg  [7:0] b;
+reg        op;
 wire [7:0] result;
-wire carry;
+wire       carry;
 
-alu test (
+alu test(
     .a(a),
     .b(b),
     .op(op),
