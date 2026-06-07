@@ -11,6 +11,7 @@
 *.vdi
 *.wpc
 *.wdf
+*.wdm
 *.lpr
 *.prj
 *.tcl
