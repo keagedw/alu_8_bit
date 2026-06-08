@@ -32,7 +32,13 @@ glbl.v
 *.c
 *.info
 *.sdb
+*.rst
+*.js
+*.sh
+*.rpt
+*.vds
 *.debug
+*alu_8_bit.runs/
 .Xil/
 .cache/
 .hw/

@@ -5,39 +5,27 @@ module carry_lookahead(
     output [3:0] result,
     output       carry_out
 );
+wire [3:0] carry, propogate;
 
-assign result[0] = a[0] ^ b[0] ^ carry_in;
+assign carry     = a & b;
+assign propogate = a ^ b;
 
-assign result[1] = a[1] ^ b[1] ^ 
-                   ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in));
+assign result[0] = propogate[0] ^ carry_in;
 
-assign result[2] = a[2] ^ b[2] ^
-                   ((a[1] & b[1]) | 
-                    (a[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))) |
-                    (b[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))));
+assign result[1] = propogate[1] ^ 
+                   (carry[0] | (propogate[0] & carry_in));
 
-assign result[3] = a[3] ^ b[3] ^
-                   ((a[2] & b[2]) |
-                    (a[2] & ((a[1] & b[1]) | 
-                    (a[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))) |
-                    (b[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))))) |
-                    (b[2] & ((a[1] & b[1]) | 
-                    (a[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))) |
-                    (b[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))))));
+assign result[2] = propogate[2] ^
+                   (carry[1] | (propogate[1] & 
+                     (carry[0] | propogate[0] & carry_in)));
 
-assign carry_out = (a[3] & b[3]) |
-                   (a[3] & ((a[2] & b[2]) |
-                    (a[2] & ((a[1] & b[1]) | 
-                    (a[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))) |
-                    (b[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))))) |
-                    (b[2] & ((a[1] & b[1]) | 
-                    (a[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))) |
-                    (b[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))))))) | 
-                   (b[3] & ((a[2] & b[2]) |
-                    (a[2] & ((a[1] & b[1]) | 
-                    (a[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))) |
-                    (b[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))))) |
-                    (b[2] & ((a[1] & b[1]) | 
-                    (a[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in))) |
-                    (b[1] & ((a[0] & b[0]) | (a[0] & carry_in) | (b[0] & carry_in)))))));
+assign result[3] = propogate[3] ^
+                   (carry[2] | (propogate[2] & 
+                    (carry[1] | (propogate[1] & 
+                     (carry[0] | propogate[0] & carry_in)))));
+
+assign carry_out = carry[3] | (propogate[3] & 
+                    (carry[2] | (propogate[2] & 
+                     (carry[1] | (propogate[1] & 
+                      (carry[0] | propogate[0] & carry_in))))));
 endmodule
