@@ -18,10 +18,12 @@ alu test(
 
 initial begin
     // test ADD
-    a = 8'd5; b = 8'd3; op = 1'b0; #10;
+    a = 8'd107; b = 8'd32; op = 1'b0; #10;
+    a = 8'd212; b = 8'd78; op = 1'b0; #10;
 
     // test SUB
-    a = 8'd10; b = 8'd3; op = 1'b1; #10;
+    a = 8'd179; b = 8'd94; op = 1'b1; #10;
+    a = 8'd10; b = 8'd53; op = 1'b1; #10;
 end
 
 endmodule
