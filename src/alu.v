@@ -37,7 +37,7 @@ always @(*) begin
             arg_b    = ~b;
             carry_in = 1'b1;
             result   = result_adder;
-            carry    = carry_adder;
+            carry    = ~carry_adder;
         end
 
         default: begin
