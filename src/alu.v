@@ -1,13 +1,16 @@
 module alu (
     input      [7:0] a,
     input      [7:0] b,
-    input            op,
+    input      [3:0] op,
     output reg [7:0] result,
     output reg       carry
 );
 
-localparam ADD = 1'b0;
-localparam SUB = 1'b1;
+localparam ADD = 3'b000;
+localparam SUB = 3'b001;
+localparam AND = 3'b010;
+localparam OR  = 3'b011;
+localparam XOR = 3'b100;
 
 reg        carry_in;
 reg  [7:0] arg_a, arg_b;
@@ -23,6 +26,8 @@ carry_lookahead adder(
 );
 
 always @(*) begin
+    carry = 1'b0;
+
     case (op)
         ADD: begin
             arg_a    = a;
@@ -39,6 +44,12 @@ always @(*) begin
             result   = result_adder;
             carry    = ~carry_adder;
         end
+
+        AND: result = a & b;
+
+        OR:  result = a | b;
+
+        XOR: result = a ^ b;
 
         default: begin
             carry  = 1'b0;
