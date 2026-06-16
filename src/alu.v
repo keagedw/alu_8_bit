@@ -1,9 +1,10 @@
 module alu (
     input      [7:0] a,
     input      [7:0] b,
-    input      [3:0] op,
+    input      [2:0] op,
     output reg [7:0] result,
-    output reg       carry
+    output reg       carry,
+    output           zero
 );
 
 localparam ADD = 3'b000;
@@ -25,8 +26,10 @@ carry_lookahead adder(
     .carry_out(carry_adder)
 );
 
+assign zero = (result == 8'h00);
+
 always @(*) begin
-    carry = 1'b0;
+    carry  = 1'b0;
 
     case (op)
         ADD: begin
