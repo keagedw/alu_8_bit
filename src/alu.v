@@ -4,6 +4,7 @@ module alu (
     input      [2:0] op,
     output reg [7:0] result,
     output reg       carry,
+    output reg       overflow,
     output           zero
 );
 
@@ -29,7 +30,8 @@ carry_lookahead adder(
 assign zero = (result == 8'h00);
 
 always @(*) begin
-    carry  = 1'b0;
+    carry    = 1'b0;
+    overflow = 1'b0;
 
     case (op)
         ADD: begin
@@ -38,6 +40,7 @@ always @(*) begin
             carry_in = 1'b0;
             result   = result_adder;
             carry    = carry_adder;
+            overflow = (a[7] & b[7] & ~result_adder[7]) | (~a[7] & ~b[7] & result_adder[7]);
         end
 
         SUB: begin
@@ -46,6 +49,7 @@ always @(*) begin
             carry_in = 1'b1;
             result   = result_adder;
             carry    = ~carry_adder;
+            overflow = (a[7] & ~b[7] & ~result_adder[7]) | (~a[7] & b[7] & result_adder[7]);
         end
 
         AND: result = a & b;
